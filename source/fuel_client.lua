@@ -249,7 +249,7 @@ Citizen.CreateThread(function()
 									if #items > 0 then
 										local can = items[1]
 					
-										local refillCost = Round(Config.RefillCost * (1 - can.info.ammo / 4500))
+										local refillCost = Round(Config.RefillCost * (1 - can.info.quality / 4500))
 										if refillCost > 0 then
 											if currentCash >= refillCost then			
 												TriggerServerEvent('fuel:pay', refillCost, GetPlayerServerId(PlayerId()))
