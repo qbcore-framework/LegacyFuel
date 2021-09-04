@@ -244,10 +244,7 @@ Citizen.CreateThread(function()
 					if currentCash >= Config.JerryCanCost then
 						DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.PurchaseJerryCan)
 						if IsControlJustReleased(0, 38) then
-							print("INPUT")
 							QBCore.Functions.TriggerCallback('fuel:server:hasJerryCans', function(hasCans, items)  
-								print(hasCans)
-								print(items)	
 								if hasCans then
 									if #items > 0 then
 										local can = items[1]
