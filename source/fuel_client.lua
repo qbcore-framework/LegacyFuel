@@ -5,6 +5,7 @@ local currentCost = 0.0
 local currentCash = 1000
 local fuelSynced = false
 local inBlacklisted = false
+local jerryCan = nil
 
 function ManageFuelUsage(vehicle)
 	if not DecorExistOn(vehicle, Config.FuelDecor) then
@@ -19,6 +20,26 @@ function ManageFuelUsage(vehicle)
 		SetFuel(vehicle, GetVehicleFuelLevel(vehicle) - Config.FuelUsage[Round(GetVehicleCurrentRpm(vehicle), 1)] * (Config.Classes[GetVehicleClass(vehicle)] or 1.0) / 10)
 	end
 end
+
+function GetJerryCanState()
+	if jerryCan ~= nil then
+        if jerryCan.info ~= nil then
+            if jerryCan.info.quality ~= nil then
+                return jerryCan.info.quality
+            else
+                return 100
+            end
+        else
+            return 100
+        end
+    else
+        return 0
+    end
+end
+
+AddEventHandler("LefacyFuel:SetJerryCan", function (data)
+	jerryCan = data
+end)
 
 Citizen.CreateThread(function()
 	DecorRegister(Config.FuelDecor, 1)
@@ -92,10 +113,16 @@ AddEventHandler('fuel:startFuelUpTick', function(pumpObject, ped, vehicle)
 		local extraCost = fuelToAdd / 1.5 * Config.CostMultiplier
 
 		if not pumpObject then
-			if GetAmmoInPedWeapon(ped, 883325847) - fuelToAdd * 100 >= 0 then
-				currentFuel = oldFuel + fuelToAdd
+			local weaponQuality = GetJerryCanState()
+			if weaponQuality ~= nil then
+				if weaponQuality - fuelToAdd >= 0 then
+					currentFuel = oldFuel + fuelToAdd
+					jerryCan.info.quality = Round(weaponQuality - fuelToAdd, 1)
 
-				SetPedAmmo(ped, 883325847, math.floor(GetAmmoInPedWeapon(ped, 883325847) - fuelToAdd * 100))
+					TriggerServerEvent("weapons:server:SetWeaponQuality", jerryCan, jerryCan.info.quality)
+				else
+					isFueling = false
+				end
 			else
 				isFueling = false
 			end
@@ -147,7 +174,8 @@ AddEventHandler('fuel:refuelFromPump', function(pumpObject, ped, vehicle)
 			DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.CancelFuelingPump .. extraString)
 			DrawText3Ds(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, Round(currentFuel, 1) .. "%")
 		else
-			DrawText3Ds(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, Config.Strings.CancelFuelingJerryCan .. "\nGas can: ~g~" .. Round(GetAmmoInPedWeapon(ped, 883325847) / 4500 * 100, 1) .. "% | Vehicle: " .. Round(currentFuel, 1) .. "%")
+			local weaponQuality = GetJerryCanState()
+    		DrawText3Ds(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, Config.Strings.CancelFuelingJerryCan .. "\nGas can: ~g~" .. Round(weaponQuality, 1) .. "% | Vehicle: " .. Round(currentFuel, 1) .. "%")
 		end
 
 		if not IsEntityPlayingAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 3) then
@@ -186,7 +214,7 @@ Citizen.CreateThread(function()
 						if GetSelectedPedWeapon(ped) == 883325847 then
 							stringCoords = vehicleCoords
 
-							if GetAmmoInPedWeapon(ped, 883325847) < 100 then
+							if not exports["qb-weapons"]:CanShoot() then
 								canFuel = false
 							end
 						end
@@ -214,32 +242,36 @@ Citizen.CreateThread(function()
 					local stringCoords = GetEntityCoords(isNearPump)
 
 					if currentCash >= Config.JerryCanCost then
-						if not HasPedGotWeapon(ped, 883325847) then
-							DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.PurchaseJerryCan)
-
-							if IsControlJustReleased(0, 38) then
-								TriggerServerEvent('QBCore:Server:AddItem', "weapon_petrolcan", 1)
-								TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["weapon_petrolcan"], "add")
-								TriggerServerEvent('fuel:pay', Config.JerryCanCost, GetPlayerServerId(PlayerId()))
-							end
-						else
-							local refillCost = Round(Config.RefillCost * (1 - GetAmmoInPedWeapon(ped, 883325847) / 4500))
-
-							if refillCost > 0 then
-								if currentCash >= refillCost then
-									DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.RefillJerryCan .. refillCost)
-
-									if IsControlJustReleased(0, 38) then
-										TriggerServerEvent('fuel:pay', refillCost, GetPlayerServerId(PlayerId()))
-
-										SetPedAmmo(ped, 883325847, 4500)
+						DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.PurchaseJerryCan)
+						if IsControlJustReleased(0, 38) then
+							print("INPUT")
+							QBCore.Functions.TriggerCallback('fuel:server:hasJerryCans', function(hasCans, items)  
+								print(hasCans)
+								print(items)	
+								if hasCans then
+									if #items > 0 then
+										local can = items[1]
+					
+										local refillCost = Round(Config.RefillCost * (1 - can.info.ammo / 4500))
+										if refillCost > 0 then
+											if currentCash >= refillCost then			
+												TriggerServerEvent('fuel:pay', refillCost, GetPlayerServerId(PlayerId()))
+												TriggerServerEvent("fuel:server:swapJerryCan", can.slot)
+											else
+												TriggerEvent('QBCore:Notify', Config.Strings.NotEnoughCashJerryCan)
+											end
+										end
+									else
+										TriggerEvent('QBCore:Notify', Config.Strings.JerryCanFull)
 									end
 								else
-									DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.NotEnoughCashJerryCan)
+									TriggerServerEvent('QBCore:Server:AddItem', "weapon_petrolcan", 1, nil, {
+										["quality"] = 100
+									})
+									TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["weapon_petrolcan"], "add")
+									TriggerServerEvent('fuel:pay', Config.JerryCanCost, GetPlayerServerId(PlayerId()))
 								end
-							else
-								DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.JerryCanFull)
-							end
+							end)
 						end
 					else
 						DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.NotEnoughCash)
