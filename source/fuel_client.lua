@@ -37,7 +37,7 @@ function GetJerryCanState()
     end
 end
 
-AddEventHandler("LefacyFuel:SetJerryCan", function (data)
+AddEventHandler("fuel:SetJerryCan", function (data)
 	jerryCan = data
 end)
 
