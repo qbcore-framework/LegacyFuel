@@ -86,3 +86,17 @@ function FindNearestFuelPump()
 
 	return pumpObject, pumpDistance
 end
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(500)
+		local playerped = PlayerPedId()
+		if IsPedInAnyVehicle(playerped) then
+			local vehfueltank = GetVehiclePedIsIn(playerped)
+			local fueltank = GetFuel(vehfueltank)
+				if fueltank < 10 then
+					SetVehicleEngineOn(vehfueltank, false, true, true)
+				end
+		end
+	end
+end)
