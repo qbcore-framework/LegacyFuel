@@ -128,8 +128,13 @@ AddEventHandler('fuel:refuelFromPump', function(pumpObject, ped, vehicle)
 	TaskTurnPedToFaceEntity(ped, vehicle, 1000)
 	Citizen.Wait(1000)
 	SetCurrentPedWeapon(ped, -1569615261, true)
-	LoadAnimDict("timetable@gardener@filling_can")
-	TaskPlayAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
+	LoadAnimDict("weapon@w_sp_jerrycan")
+	TaskPlayAnim(ped, "weapon@w_sp_jerrycan", "fire", 8.0, 1.0, -1, 1, 0, 0, 0, 0 )
+	local pos = GetEntityCoords(PlayerPedId(), true)
+	local model = GetHashKey("prop_jerrycan_01a")
+	local object = CreateObject(model, pos.x, pos.y, pos.z, true, true, true)
+    AttachEntityToEntity(object, PlayerPedId(), GetPedBoneIndex(PlayerPedId(), 57005), 0.05, 0.1, -0.3, 300.0, 250.0, 20.0, true, true, false, true, 1, true)
+	JerryCan = object
 
 	TriggerEvent('fuel:startFuelUpTick', pumpObject, ped, vehicle)
 
@@ -150,8 +155,8 @@ AddEventHandler('fuel:refuelFromPump', function(pumpObject, ped, vehicle)
 			DrawText3Ds(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, Config.Strings.CancelFuelingJerryCan .. "\nGas can: ~g~" .. Round(GetAmmoInPedWeapon(ped, 883325847) / 4500 * 100, 1) .. "% | Vehicle: " .. Round(currentFuel, 1) .. "%")
 		end
 
-		if not IsEntityPlayingAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 3) then
-			TaskPlayAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 2.0, 8.0, -1, 50, 0, 0, 0, 0)
+		if not IsEntityPlayingAnim(ped, "weapon@w_sp_jerrycan", "fire", 3) then
+			TaskPlayAnim(ped, "weapon@w_sp_jerrycan", "fire", 8.0, 1.0, -1, 1, 0, 0, 0, 0 )
 		end
 
 		if IsControlJustReleased(0, 38) or DoesEntityExist(GetPedInVehicleSeat(vehicle, -1)) or (isNearPump and GetEntityHealth(pumpObject) <= 0) then
@@ -163,7 +168,17 @@ AddEventHandler('fuel:refuelFromPump', function(pumpObject, ped, vehicle)
 
 	ClearPedTasks(ped)
 	RemoveAnimDict("timetable@gardener@filling_can")
+	QBCore.Functions.Notify('The vehicle filled with fuel!', 'success')
+	PlaySound(-1, "5_SEC_WARNING", "HUD_MINI_GAME_SOUNDSET", 0, 0, 1)
+	DropJerryCan()
 end)
+
+function DropJerryCan()
+    ClearPedTasks(PlayerPedId())
+    DetachEntity(JerryCan, true, true)
+    DeleteObject(JerryCan)
+    JerryCan = nil
+end
 
 Citizen.CreateThread(function()
 	while true do
