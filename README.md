@@ -17,3 +17,6 @@ LegacyFuel edit for QB-Core using qb-target, progressbar and -nh-context for bet
 ### https://streamable.com/q1krhn
 ![FiveM - Test Server built with QBCore Framework by JericoFx   Kakarot   Hamy! 2021-10-05 4_19_18 PM](https://user-images.githubusercontent.com/91661118/136115306-30adb97f-d45d-4990-a25f-64b0541b4ea8.png)
 ![FiveM - Test Server built with QBCore Framework by JericoFx   Kakarot   Hamy! 2021-10-05 4_19_49 PM](https://user-images.githubusercontent.com/91661118/136115311-70b554bd-e228-400d-895e-041dcc98f0b1.png)
+
+# Issues and Suggestions
+Please use the GitHub issues system to report issues or make suggestions, when making suggestion, please keep [Suggestion] in the title to make it clear that it is a suggestion.
