@@ -1,32 +1,19 @@
-### About
-Started off as my first script, and for whatever reason, I decided to release it. As it was pretty badly created, I felt like I should rewrite it and make a better version, so ended up spending a few hours doing so.
+![legacyfuel edit1](https://user-images.githubusercontent.com/91661118/136115181-806f46ad-55c9-4911-8c72-86e6679c1f68.png)
 
-### Installation
-1) Download the latest version in the "code" tab on GitHub.
-2) Drag & drop the folder into your `resources` server folder.
-3) Configure the config file to your liking.
-4) Add `start LegacyFuel` to your server config.
+# LegacyFuel used with QBCore Framework
+LegacyFuel edit for QB-Core using qb-target, progressbar and -nh-context for better interaction styled like NP 3.0
 
-### Exports
-There are currently two (client-sided) exports available, which should help you control the fuel level for vehicles whenever needed.
+# Dependencies
+* [QBCore](https://github.com/qbcore-framework/qb-core)
+* [qb-target](https://github.com/loljoshie/qb-target)
+* [PolyZone](https://github.com/mkafrin/PolyZone)
+* [-nh-context](https://github.com/Aveeux/-nh-context)
 
-```
-SetFuel(vehicle --[[ Vehicle ]], value --[[ Number: (0-100) ]])
-GetFuel(vehicle --[[ Vehicle ]]) -- Returns the vehicle's fuel level.
-```
+# My css edits of qb-target, -nh-context and progressbar styled like NP 3.0
+* [qb-target](https://github.com/loljoshie/qb-target)
+* [-nh-context](https://github.com/loljoshie/-nh-context)
+* [progressbar](https://github.com/loljoshie/progressbar)
 
-**Example usage:**
-```
-function SpawnVehicle(modelHash)
-    local vehicle = CreateVehicle(modelHash, coords.x, coords.y, coords.z, true, false)
-
-    exports["LegacyFuel"]:SetFuel(vehicle, 100)
-end
-
-function StoreVehicleInGarage(vehicle)
-    local plate = GetVehicleNumberPlateText(vehicle)
-    local fuelLevel = exports["LegacyFuel"]:GetFuel(vehicle)
-
-    TriggerServerEvent('vehiclesStored', plate, fuelLevel)
-end
-```
+### https://streamable.com/q1krhn
+![FiveM - Test Server built with QBCore Framework by JericoFx   Kakarot   Hamy! 2021-10-05 4_19_18 PM](https://user-images.githubusercontent.com/91661118/136115306-30adb97f-d45d-4990-a25f-64b0541b4ea8.png)
+![FiveM - Test Server built with QBCore Framework by JericoFx   Kakarot   Hamy! 2021-10-05 4_19_49 PM](https://user-images.githubusercontent.com/91661118/136115311-70b554bd-e228-400d-895e-041dcc98f0b1.png)
