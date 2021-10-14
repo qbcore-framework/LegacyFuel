@@ -1,6 +1,10 @@
 ![legacyfuel edit1](https://user-images.githubusercontent.com/91661118/136115181-806f46ad-55c9-4911-8c72-86e6679c1f68.png)
 
 # LegacyFuel used with QBCore Framework
+Join my Discord laboratory for updates, support, and special early testing!
+<br>
+https://discord.gg/HH6uTcBfew
+
 LegacyFuel edit for QB-Core using qb-target, progressbar and -nh-context for better interaction styled like NP 3.0
 
 # Dependencies
