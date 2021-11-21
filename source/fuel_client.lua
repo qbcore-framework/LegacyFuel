@@ -113,10 +113,11 @@ AddEventHandler('fuel:startFuelUpTick', function(pumpObject, ped, vehicle)
  		if extraCost >= 1 then
 			currentCost = currentCost + extraCost
 			todaycost = extraCost
-		if currentCash >= currentCost then
-			SetFuel(vehicle, currentFuel)
-		else
-			isFueling = false
+			if currentCash >= currentCost then
+				SetFuel(vehicle, currentFuel)
+			else
+				isFueling = false
+			end
 		end
 	end
 
