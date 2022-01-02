@@ -6,17 +6,5 @@ description 'Legacy Fuel'
 version '1.3'
 
 shared_script 'config.lua'
-
-client_scripts {
-	'functions/functions_client.lua',
-	'source/fuel_client.lua'
-}
-
-server_scripts {
-	'source/fuel_server.lua'
-}
-
-exports {
-	'GetFuel',
-	'SetFuel'
-}
+server_script 'server/main.lua'
+client_script 'client/main.lua'
