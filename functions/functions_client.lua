@@ -1,4 +1,7 @@
 function GetFuel(vehicle)
+	if not DecorExistOn(vehicle, Config.FuelDecor) then
+		SetInitialFuelLevel(vehicle)
+	end
 	return DecorGetFloat(vehicle, Config.FuelDecor)
 end
 
@@ -7,6 +10,10 @@ function SetFuel(vehicle, fuel)
 		SetVehicleFuelLevel(vehicle, fuel + 0.0)
 		DecorSetFloat(vehicle, Config.FuelDecor, GetVehicleFuelLevel(vehicle))
 	end
+end
+
+function SetInitialFuelLevel(vehicle)
+	SetFuel(vehicle, math.random(200, 800) / 10)
 end
 
 function LoadAnimDict(dict)
@@ -56,6 +63,7 @@ function CreateBlip(coords)
 	return blip
 end
 
+-- GetEntityModel(object) will error out if the entity exists, but isnt loaded yet.
 function FindNearestFuelPump()
 	local coords = GetEntityCoords(PlayerPedId())
 	local fuelPumps = {}

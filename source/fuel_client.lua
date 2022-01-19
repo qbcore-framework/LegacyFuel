@@ -10,7 +10,7 @@ local inBlacklisted = false
 
 function ManageFuelUsage(vehicle)
 	if not DecorExistOn(vehicle, Config.FuelDecor) then
-		SetFuel(vehicle, math.random(200, 800) / 10)
+		SetInitialFuelLevel(vehicle)
 	elseif not fuelSynced then
 		SetFuel(vehicle, GetFuel(vehicle))
 
