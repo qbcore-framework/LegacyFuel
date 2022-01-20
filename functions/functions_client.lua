@@ -1,4 +1,6 @@
 function GetFuel(vehicle)
+	if not DoesEntityExist(vehicle) then end
+
 	if not DecorExistOn(vehicle, Config.FuelDecor) then
 		SetInitialFuelLevel(vehicle)
 	end
@@ -6,6 +8,8 @@ function GetFuel(vehicle)
 end
 
 function SetFuel(vehicle, fuel)
+	if not DoesEntityExist(vehicle) then end
+	
 	if type(fuel) == 'number' and fuel >= 0 and fuel <= 100 then
 		SetVehicleFuelLevel(vehicle, fuel + 0.0)
 		DecorSetFloat(vehicle, Config.FuelDecor, GetVehicleFuelLevel(vehicle))
