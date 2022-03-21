@@ -50,7 +50,7 @@ function CreateBlip(coords)
 	SetBlipAsShortRange(blip, true)
 
 	BeginTextCommandSetBlipName("STRING")
-	AddTextComponentString("Gas Station")
+	AddTextComponentString(Lang:t("info.station_blips"))
 	EndTextCommandSetBlipName(blip)
 
 	return blip

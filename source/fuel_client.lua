@@ -148,13 +148,13 @@ AddEventHandler('fuel:refuelFromPump', function(pumpObject, ped, vehicle)
 
 		if pumpObject then
 			local stringCoords = GetEntityCoords(pumpObject)
-			local extraString = "\n" .. Config.Strings.TotalCost .. ": ~g~$" .. Round(todaycost, 1)
+			local extraString = "\n" .. Lang:t("info.total_cost", {price = Round(todaycost, 1)})
 
-			DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.CancelFuelingPump .. extraString)
+			DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Lang:t("info.cancel_fueling_pump") .. extraString)
 			DrawText3Ds(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, Round(currentFuel, 1) .. "%")
 			DrawText3Ds(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 1.3, Round(currentCost, 1) ..   '~b~$~w~   cost')
 		else
-			DrawText3Ds(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, Config.Strings.CancelFuelingJerryCan .. "\nGas can: ~g~" .. Round(GetAmmoInPedWeapon(ped, 883325847) / 4500 * 100, 1) .. "% | Vehicle: " .. Round(currentFuel, 1) .. "%")
+			DrawText3Ds(vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 0.5, Lang:t("info.cancel_fueling_jerry_can") .. "\nGas can: ~g~" .. Round(GetAmmoInPedWeapon(ped, 883325847) / 4500 * 100, 1) .. "% | Vehicle: " .. Round(currentFuel, 1) .. "%")
 		end
 
 		if not IsEntityPlayingAnim(ped, "timetable@gardener@filling_can", "gar_ig_5_filling_can", 3) then
@@ -180,7 +180,7 @@ CreateThread(function()
 			if IsPedInAnyVehicle(ped) and GetPedInVehicleSeat(GetVehiclePedIsIn(ped), -1) == ped then
 				local pumpCoords = GetEntityCoords(isNearPump)
 
-				DrawText3Ds(pumpCoords.x, pumpCoords.y, pumpCoords.z + 1.2, Config.Strings.ExitVehicle)
+				DrawText3Ds(pumpCoords.x, pumpCoords.y, pumpCoords.z + 1.2, Lang:t("info.exit_vehicle"))
 			else
 				local vehicle = GetPlayersLastVehicle()
 				local vehicleCoords = GetEntityCoords(vehicle)
@@ -200,7 +200,7 @@ CreateThread(function()
 
 						if GetVehicleFuelLevel(vehicle) < 95 and canFuel then
 							if currentCash > 0 then
-								DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.EToRefuel)
+								DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Lang:t("info.e_to_refuel"))
 
 								if IsControlJustReleased(0, 38) then
 									isFueling = true
@@ -209,12 +209,12 @@ CreateThread(function()
 									LoadAnimDict("timetable@gardener@filling_can")
 								end
 							else
-								DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.NotEnoughCash)
+								DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Lang:t("error.not_enough_cash"))
 							end
 						elseif not canFuel then
-							DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.JerryCanEmpty)
+							DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Lang:t("error.jerry_can_empty"))
 						else
-							DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.FullTank)
+							DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Lang:t("success.full_tank"))
 						end
 					end
 				elseif isNearPump then
@@ -222,7 +222,7 @@ CreateThread(function()
 
 					if currentCash >= Config.JerryCanCost then
 						if not HasPedGotWeapon(ped, 883325847) then
-							DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.PurchaseJerryCan)
+							DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Lang:t("info.purchase_jerry_can", {price = Config.JerryCanCost}))
 
 							if IsControlJustReleased(0, 38) then
 								TriggerServerEvent('QBCore:Server:AddItem', "weapon_petrolcan", 1)
@@ -234,7 +234,7 @@ CreateThread(function()
 
 							if refillCost > 0 then
 								if currentCash >= refillCost then
-									DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.RefillJerryCan .. refillCost)
+									DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Lang:t("info.refill_jerry_can") .. refillCost)
 
 									if IsControlJustReleased(0, 38) then
 										TriggerServerEvent('fuel:pay', refillCost, GetPlayerServerId(PlayerId()))
@@ -242,14 +242,14 @@ CreateThread(function()
 										SetPedAmmo(ped, 883325847, 4500)
 									end
 								else
-									DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.NotEnoughCashJerryCan)
+									DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Lang:t("error.not_enough_cash_jerry_can"))
 								end
 							else
-								DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.JerryCanFull)
+								DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Lang:t("sucess.jerry_can_full"))
 							end
 						end
 					else
-						DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Config.Strings.NotEnoughCash)
+						DrawText3Ds(stringCoords.x, stringCoords.y, stringCoords.z + 1.2, Lang:t("error.not_enough_cash"))
 					end
 				else
 					Wait(250)
