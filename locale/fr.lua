@@ -17,7 +17,8 @@ local Translations = {
         ["refill_jerry_can"] = "Appuyez sur ~g~E ~w~pour remplir le bidon d'essence",
         ["total_cost"] = "Coût: ${price}€",
 		["station_blips"] = "Station essence",
-    }
+    },
+	warning = {},
 }
 
 Lang = Locale:new({

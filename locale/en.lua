@@ -17,7 +17,8 @@ local Translations = {
 		["refill_jerry_can"] = "Press ~g~E ~w~ to refill the jerry can for ",
 		["total_cost"] = "Cost: ~g~%{price}",
 		["station_blips"] = "Gas station",
-    }
+    },
+	warning = {},
 }
 
 Lang = Locale:new({
