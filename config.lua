@@ -10,9 +10,6 @@ Config.FuelDecor = "_FUEL_LEVEL"
 -- What keys are disabled while you're fueling.
 Config.DisableKeys = {0, 22, 23, 24, 29, 30, 31, 37, 44, 56, 82, 140, 166, 167, 168, 170, 288, 289, 311, 323}
 
--- Want to use the HUD? Turn this to true.
-Config.EnableHUD = false
-
 -- Configure blips here. Turn both to false to disable blips all together.
 Config.ShowNearestGasStationOnly = true
 Config.ShowAllGasStations = false
@@ -34,8 +31,6 @@ Config.Strings = {
 	NotEnoughCashJerryCan = "Not enough cash to refill jerry can",
 	JerryCanFull = "Jerry can is full",
 	TotalCost = "Cost",
-	PurchaseJerryCan = "Press ~g~E ~w~to grab a jerry can",
-	RefillJerryCan = "Press ~g~E ~w~ to refill the jerry can",
 }
 
 Config.PumpModels = {
@@ -126,5 +121,6 @@ Config.GasStations = {
 	vector3(176.631, -1562.025, 29.263),
 	vector3(176.631, -1562.025, 29.263),
 	vector3(-319.292, -1471.715, 30.549),
+	vector3(-66.48, -2532.57, 6.14),
 	vector3(1784.324, 3330.55, 41.253)
 }
